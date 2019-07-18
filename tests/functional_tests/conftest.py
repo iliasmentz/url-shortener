@@ -28,6 +28,7 @@ def humanize_werkzeug_client(client_method):
     it easier to use in tests.
 
     """
+
     @functools.wraps(client_method)
     def wrapper(url, **kwargs):
         # Always set the content type to `application/json`.
@@ -65,11 +66,16 @@ def app(request):
     return app
 
 
-@pytest.fixture(scope='function')
-def client(app, request):
+@pytest.fixture(scope='module')
+def client(app):
     return app.test_client()
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope='module')
 def get(client):
     return humanize_werkzeug_client(client.get)
+
+#
+@pytest.fixture(scope='module')
+def post(client):
+    return humanize_werkzeug_client(client.post)
